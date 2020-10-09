@@ -1,0 +1,1 @@
+Einlesen eines Näherungssensors für die Speichen eines Wagenrades einer Modelleisenbahn.
