@@ -21,15 +21,29 @@ void setup() {
   Timer1.attachInterrupt(timerIsr);
 }
 
+/*
+ * Zählt die Speichen, die vom Näherungssensor gemeldet werden.
+ * Jede Speiche wird doppelt gezählt, da sowohl die Rising- wie auch die Falling-Flanke
+ * des Signals einen Interrupt auslöst. Dies wurde so eingestellt, damit auch kleine Bewegungen
+ * des Wagenrades bemerkt werden.
+ */
 void signalIsr(void) {
   spokeCount += 1;
 }
 
+/*
+ * Prüft ob innerhalb des definierte Intervalls eine Bewegung des Rades stattgefunden hat.
+ * Entsprechend wird der Modus des Wagens (fährt, stoppt) gesetzt. Anschliessend wird der
+ * Zähler wieder auf 0 gesetzt.
+ */
 void timerIsr(void) {
   trainHas(spokeCount == 0);
   spokeCount = 0;
 }
 
+/*
+ * Der Modus des Wagens wird auf "fährt" oder "wartet" gesetzt.
+ */
 void trainHas(bool stopped) {
   digitalWrite(SIGNAL_OUTPUT, stopped ? LOW : HIGH);
   Serial.println(stopped ? "wartet" : "fährt");
