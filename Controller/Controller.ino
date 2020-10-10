@@ -8,7 +8,9 @@
 
 #define SENSOR_INPUT	2   // Arduino Uno/Nano/Mini: Only Pin 2/3 allowed
 #define SIGNAL_OUTPUT  13   // Test mit LED
-#define INTERVAL     1000   // millisecond
+
+#define MILLISECONDS 1000
+#define INTERVAL     1000 * MILLISECONDS
 
 int spokeCount = 0;
 
@@ -37,16 +39,16 @@ void signalIsr(void) {
  * Zähler wieder auf 0 gesetzt.
  */
 void timerIsr(void) {
-  trainHas(spokeCount == 0);
+  trainMoving(spokeCount != 0);
   spokeCount = 0;
 }
 
 /*
  * Der Modus des Wagens wird auf "fährt" oder "wartet" gesetzt.
  */
-void trainHas(bool stopped) {
-  digitalWrite(SIGNAL_OUTPUT, stopped ? LOW : HIGH);
-  Serial.println(stopped ? "wartet" : "fährt");
+void trainMoving(bool moving) {
+  digitalWrite(SIGNAL_OUTPUT, moving ? HIGH : LOW);
+  Serial.println(moving ? "fährt" : "wartet");
 }
 
 void loop() {
