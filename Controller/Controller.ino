@@ -27,10 +27,11 @@ void setup() {
  * Zählt die Speichen, die vom Näherungssensor gemeldet werden.
  * Jede Speiche wird doppelt gezählt, da sowohl die Rising- wie auch die Falling-Flanke
  * des Signals einen Interrupt auslöst. Dies wurde so eingestellt, damit auch kleine Bewegungen
- * des Wagenrades bemerkt werden.
+ * des Wagenrades bemerkt werden. Der Modus des Wages wird sofort auf "fährt" gesetzt.
  */
 void signalIsr(void) {
   spokeCount += 1;
+  trainMoving(true);
 }
 
 /*
