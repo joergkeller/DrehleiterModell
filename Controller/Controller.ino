@@ -12,6 +12,8 @@
 #define MILLISECONDS 1000
 #define INTERVAL     1000 * MILLISECONDS
 
+#define SPOKES         12   // Speichen pro Rad (zur Berechnung der Umdrehungsgeschwindigkeit)
+
 int spokeCount = 0;
 
 void setup() {
@@ -48,8 +50,16 @@ void timerIsr(void) {
  * Der Modus des Wagens wird auf "fährt" oder "wartet" gesetzt.
  */
 void trainMoving(bool moving) {
-  digitalWrite(SIGNAL_OUTPUT, moving ? HIGH : LOW);
-  Serial.println(moving ? "fährt" : "wartet");
+  if (moving) {
+    int speed = spokeCount * 60 / (2 * SPOKES);
+    digitalWrite(SIGNAL_OUTPUT, HIGH);
+    Serial.print("fährt mit ");
+    Serial.print(speed);
+    Serial.println(" U/min");
+  } else {
+    digitalWrite(SIGNAL_OUTPUT, LOW);
+    Serial.println("wartet");
+  }
 }
 
 void loop() {
