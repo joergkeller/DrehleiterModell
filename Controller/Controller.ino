@@ -9,8 +9,12 @@
 #include "PinChangeInterrupt.h"
 #endif
 
-#define SENSOR_INPUT	2   // Arduino Uno/Nano/Mini: Only Pin 2/3 allowed
-#define LED_OUTPUT     13   // Test mit LED
+#if defined(__AVR_ATtiny85__)
+#define LED_OUTPUT        1   // Test mit LED for ATTINY85
+#else
+#define LED_OUTPUT       13   // Test mit LED for other Arduinos
+#endif
+#define SENSOR_INPUT	  2   // Arduino Uno/Nano/Mini: Only Pin 2/3 allowed
 #define DREHLICHT_HINTEN  4
 #define DREHLICHT_VORNE   5
 
@@ -22,9 +26,7 @@ int spokeCount = 0;
 void setup() {
   Serial.begin(9600);
   pinMode(SENSOR_INPUT, INPUT);
-  #if not defined(__AVR_ATtiny85__)
-    pinMode(LED_OUTPUT, OUTPUT);
-  #endif
+  pinMode(LED_OUTPUT, OUTPUT);
   pinMode(DREHLICHT_HINTEN, OUTPUT);
   pinMode(DREHLICHT_VORNE, OUTPUT);
   #if defined(__AVR_ATtiny85__)
@@ -60,9 +62,7 @@ void timerIsr(void) {
  * Der Modus des Wagens wird auf "fährt" oder "wartet" gesetzt.
  */
 void trainStopped(bool stopped) {
-  #if not defined(__AVR_ATtiny85__)
-    digitalWrite(LED_OUTPUT, stopped ? LOW : HIGH);
-  #endif
+  digitalWrite(LED_OUTPUT, stopped ? LOW : HIGH);
   digitalWrite(DREHLICHT_VORNE, stopped ? LOW : HIGH);
   digitalWrite(DREHLICHT_HINTEN, stopped ? LOW : HIGH);
   Serial.println(stopped ? "wartet" : "fährt");
