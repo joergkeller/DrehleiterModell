@@ -18,8 +18,8 @@
 #define DREHLICHT_HINTEN  4
 #define DREHLICHT_VORNE   5
 
-#define MILLISECONDS 1000
-#define INTERVAL     1000 * MILLISECONDS
+#define MILLISECONDS   1000
+#define INTERVAL      (1000 * MILLISECONDS)
 
 int spokeCount = 0;
 
