@@ -1,3 +1,5 @@
 board_manager:
+  additional_urls:
+    - http://digistump.com/package_digistump_index.json
 directories:
   user: ./
