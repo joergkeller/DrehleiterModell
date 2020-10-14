@@ -12,8 +12,6 @@
 #define MILLISECONDS 1000
 #define INTERVAL     1000 * MILLISECONDS
 
-#define SPOKES         12   // Speichen pro Rad (zur Berechnung der Umdrehungsgeschwindigkeit)
-
 int spokeCount = 0;
 
 void setup() {
@@ -29,11 +27,10 @@ void setup() {
  * Zählt die Speichen, die vom Näherungssensor gemeldet werden.
  * Jede Speiche wird doppelt gezählt, da sowohl die Rising- wie auch die Falling-Flanke
  * des Signals einen Interrupt auslöst. Dies wurde so eingestellt, damit auch kleine Bewegungen
- * des Wagenrades bemerkt werden. Der Modus des Wages wird sofort auf "fährt" gesetzt.
+ * des Wagenrades bemerkt werden.
  */
 void signalIsr(void) {
   spokeCount += 1;
-  trainMoving(true);
 }
 
 /*
@@ -42,24 +39,16 @@ void signalIsr(void) {
  * Zähler wieder auf 0 gesetzt.
  */
 void timerIsr(void) {
-  trainMoving(spokeCount != 0);
+  trainStopped(spokeCount == 0);
   spokeCount = 0;
 }
 
 /*
  * Der Modus des Wagens wird auf "fährt" oder "wartet" gesetzt.
  */
-void trainMoving(bool moving) {
-  if (moving) {
-    int speed = spokeCount * 60 / (2 * SPOKES);
-    digitalWrite(SIGNAL_OUTPUT, HIGH);
-    Serial.print("fährt mit ");
-    Serial.print(speed);
-    Serial.println(" U/min");
-  } else {
-    digitalWrite(SIGNAL_OUTPUT, LOW);
-    Serial.println("wartet");
-  }
+void trainStopped(bool stopped) {
+  digitalWrite(SIGNAL_OUTPUT, stopped ? LOW : HIGH);
+  Serial.println(stopped ? "wartet" : "fährt");
 }
 
 void loop() {
