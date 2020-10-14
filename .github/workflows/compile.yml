@@ -2,7 +2,7 @@ name: Arduino compile test
 on: [push, pull_request]
 
 jobs:
-  build-uno:
+  build-nano:
     name: AVR Nano board 
     runs-on: ubuntu-latest
     steps:
@@ -25,3 +25,28 @@ jobs:
       - name: Compile script
         run: |
           arduino-cli compile --fqbn=arduino:avr:nano Controller/Controller.ino
+
+  build-attiny:
+    name: Digispark ATtiny85 board
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+
+      - name: Install Arduino CLI
+        uses: arduino/setup-arduino-cli@v1.0.0
+
+      - name: Install AVR core
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install digistump:avr@1.6.7
+
+      - name: Prepare code and submodules
+        run: |
+          git submodule init
+          git submodule update
+
+      - name: Compile script
+        run: |
+          arduino-cli compile --fqbn=digistump:avr:digispark-tiny8 Controller/Controller.ino
+

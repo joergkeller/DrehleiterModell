@@ -1,3 +1,6 @@
 [submodule "libraries/TimerOne"]
 	path = libraries/TimerOne
 	url = https://github.com/PaulStoffregen/TimerOne.git
+[submodule "libraries/PinChangeInterrupt"]
+	path = libraries/PinChangeInterrupt
+	url = https://github.com/NicoHood/PinChangeInterrupt.git
